@@ -1,5 +1,5 @@
 import pytest
-from match import list_maker, remaining, position_check
+from match import list_maker, remaining, eliminated_letters, position_check
 
 
 def test_list_maker():
@@ -37,6 +37,15 @@ def test_position_check():
         [],
         [2, 3],
     )  # Only report first wrong-position 's'
+
+
+def test_eliminated_letters():
+    currlist = ["z", "b", "r"]  # The answer is 'answe' and we guessed 'zebra' before
+    guess = "guess"
+    rightpos, wrongpos = ([], [2, 3])
+    _new_list_of_eliminated_letters = ["z", "b", "r", "g", "u"]
+    test_result = eliminated_letters(currlist, guess, rightpos, wrongpos)
+    assert test_result == _new_list_of_eliminated_letters
 
 
 def test_remaining():
