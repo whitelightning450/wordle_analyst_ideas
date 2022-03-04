@@ -44,6 +44,15 @@ def remaining(guess, wordlist, rightpos=None, wrongpos=None):
     return remains
 
 
+def possible_matches(guess, wordlist):
+    s_g = set(guess)
+    r = []
+    for w in wordlist:
+        if not (set() == (set(w) & s_g)):
+            r.append(w)
+    return r
+
+
 if __name__ == "__main__":
     wl = list_maker(10)
     print(wl)

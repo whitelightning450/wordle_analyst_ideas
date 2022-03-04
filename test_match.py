@@ -1,5 +1,6 @@
 import pytest
 from match import list_maker, remaining, eliminated_letters, position_check
+from match import possible_matches
 
 
 def test_list_maker():
@@ -46,6 +47,35 @@ def test_eliminated_letters():
     _new_list_of_eliminated_letters = ["z", "b", "r", "g", "u"]
     test_result = eliminated_letters(currlist, guess, rightpos, wrongpos)
     assert test_result == _new_list_of_eliminated_letters
+
+
+def test_possible_matches():
+    guess = "wards"
+    wordlist = [
+        "rides",
+        "drive",
+        "snort",
+        "green",
+        "trove",
+        "zebra",
+        "couch",
+        "adieu",
+        "sport",
+        "bicep",
+        "quick",
+    ]
+    _possible_matches = [
+        "rides",
+        "drive",
+        "snort",
+        "green",
+        "trove",
+        "zebra",
+        "adieu",
+        "sport",
+    ]
+    test_result = possible_matches(guess, wordlist)
+    assert test_result == _possible_matches
 
 
 def test_remaining():
