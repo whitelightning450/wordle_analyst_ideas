@@ -1,6 +1,6 @@
 import pytest
-from match import list_maker, remaining, eliminated_letters, position_check
-from match import possible_matches
+from word_matcher import list_maker, remaining, new_eliminated_letters, eliminated_letters, position_check
+from word_matcher import possible_matches
 
 
 def test_list_maker():
@@ -41,12 +41,20 @@ def test_position_check():
 
 
 def test_eliminated_letters():
-    currlist = ["z", "b", "r"]  # The answer is 'answe' and we guessed 'zebra' before
+    currset = {"z", "b", "r"}  # The answer is 'answe' and we guessed 'zebra' before
     guess = "guess"
     rightpos, wrongpos = ([], [2, 3])
-    _new_list_of_eliminated_letters = ["z", "b", "r", "g", "u"]
-    test_result = eliminated_letters(currlist, guess, rightpos, wrongpos)
-    assert test_result == _new_list_of_eliminated_letters
+    _new_set_of_eliminated_letters = {"z", "b", "r", "g", "u"}
+    test_result = eliminated_letters(currset, guess, rightpos, wrongpos)
+    assert test_result ^ _new_set_of_eliminated_letters == set()
+
+
+def test_new_eliminated_letters():
+    guess = "guess"
+    rightpos, wrongpos = ([], [2, 3])
+    _new_set_of_eliminated_letters = {"g", "u"}
+    test_result = new_eliminated_letters(guess, rightpos, wrongpos)
+    assert test_result ^ _new_set_of_eliminated_letters == set()
 
 
 def test_possible_matches():

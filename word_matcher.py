@@ -27,7 +27,14 @@ def position_check(guess, answer):
 
 
 def eliminated_letters(currlist, guess, rightpos, wrongpos):
-    return ["z", "b", "r", "g", "u"]
+    return set(currlist) | new_eliminated_letters(guess, rightpos, wrongpos)
+
+
+def new_eliminated_letters(guess, rightpos, wrongpos):
+    allrightpos = set(chain(wrongpos,rightpos))
+    rightletters = set([guess[i] for i in allrightpos])
+    wrongletters = set(guess) - rightletters
+    return wrongletters
 
 
 def remaining(guess, wordlist, rightpos=None, wrongpos=None):
