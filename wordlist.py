@@ -74,3 +74,4 @@ wordlist = [
     "fight",
     "light",
 ]
+wordset = set(wordlist)
