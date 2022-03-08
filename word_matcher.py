@@ -48,7 +48,7 @@ def new_eliminated_letters(guess, rightpos, wrongpos):
     return wrongletters
 
 
-def remaining(guess, wordlist, rightpos=None, wrongpos=None):
+def remaining(guess, wordlist, rightpos=None, wrongpos=None, x_letters=None):
     if not rightpos:
         rightpos = []
     if not wrongpos:
