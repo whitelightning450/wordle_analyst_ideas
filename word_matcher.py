@@ -31,6 +31,22 @@ def wrongpos_check(guess, answer, rightpos=None):
     return sorted(list(set(chain(*wrongpos))))
 
 
+def new_double_letter_check(guess, rightpos, wrongpos):
+    allrightpos = set(chain(wrongpos, rightpos))
+    rightletters = list([guess[i] for i in allrightpos])
+    max_repeat_letters = {}
+    for _i, _l in enumerate(rightletters):
+        _c = guess.count(_l)
+        _c2 = rightletters.count(_l)
+        if _c > _c2:
+            max_repeat_letters[_l] = _c2
+    return max_repeat_letters
+
+
+def double_letter_aggregate(new, prev={}):
+    return prev.update(new)
+
+
 def position_check(guess, answer):
     rightpos = rightpos_check(guess, answer)
     wrongpos = wrongpos_check(guess, answer, rightpos)

@@ -3,6 +3,7 @@ from word_matcher import (
     list_maker,
     remaining,
     new_eliminated_letters,
+    new_double_letter_check,
     eliminated_letters,
     position_check,
     possible_matches,
@@ -44,6 +45,13 @@ def test_position_check():
     answer = "answe"
     # Only report first wrong-position 's'
     assert position_check(guess, answer) == ("guess", [], [2, 3])
+
+
+def test_new_double_letter_check():
+    guess = "gusse"
+    answer = "answe"
+    (rightpos, wrongpos) = position_check(guess, answer)
+    assert new_double_letter_check(guess, rightpos, wrongpos) == {"s": 1}
 
 
 def test_eliminated_letters():
