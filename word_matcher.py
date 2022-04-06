@@ -9,12 +9,17 @@ def list_maker(n, l=5):
     return [("".join(random.choice(LETTERS) for _l in range(l))) for _n in range(n)]
 
 
-def rightpos_check(a, b):
-    return [_i for _i in range(max(len(a), len(b))) if ord(a[_i]) ^ ord(b[_i]) == 0]
+def rightpos_check(guess, answer):
+    return [
+        _i
+        for _i in range(max(len(guess), len(answer)))
+        if ord(guess[_i]) ^ ord(answer[_i]) == 0
+    ]
 
 
-def position_check(guess, answer):
-    rightpos = rightpos_check(guess, answer)
+def wrongpos_check(guess, answer, rightpos=None):
+    if not rightpos:
+        rightpos = rightpos_check(guess, answer)
     answer_remain = "".join(l for _i, l in enumerate(answer) if _i not in rightpos)
     wrongpos = []
     for _i, _gl in enumerate(guess):
@@ -23,7 +28,13 @@ def position_check(guess, answer):
             wrongpos.append(
                 [_i for _al in answer if (_gl == _al) and (_i not in rightpos)]
             )
-    return rightpos, sorted(list(set(chain(*wrongpos))))
+    return sorted(list(set(chain(*wrongpos))))
+
+
+def position_check(guess, answer):
+    rightpos = rightpos_check(guess, answer)
+    wrongpos = wrongpos_check(guess, answer, rightpos)
+    return guess, rightpos, wrongpos
 
 
 def eliminated_letters(currlist, guess, rightpos, wrongpos):
@@ -31,7 +42,7 @@ def eliminated_letters(currlist, guess, rightpos, wrongpos):
 
 
 def new_eliminated_letters(guess, rightpos, wrongpos):
-    allrightpos = set(chain(wrongpos,rightpos))
+    allrightpos = set(chain(wrongpos, rightpos))
     rightletters = set([guess[i] for i in allrightpos])
     wrongletters = set(guess) - rightletters
     return wrongletters

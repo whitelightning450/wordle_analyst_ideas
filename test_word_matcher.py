@@ -1,6 +1,12 @@
 import pytest
-from word_matcher import list_maker, remaining, new_eliminated_letters, eliminated_letters, position_check
-from word_matcher import possible_matches
+from word_matcher import (
+    list_maker,
+    remaining,
+    new_eliminated_letters,
+    eliminated_letters,
+    position_check,
+    possible_matches,
+)
 
 
 def test_list_maker():
@@ -10,34 +16,34 @@ def test_list_maker():
 def test_position_check():
     guess = "guers"
     answer = "answe"
-    assert position_check(guess, answer) == ([], [2, 4])
+    assert position_check(guess, answer) == ("guers", [], [2, 4])
+
     guess = "segus"
     answer = "ansse"
-    assert position_check(guess, answer) == ([], [0, 1, 4])
+    assert position_check(guess, answer) == ("segus", [], [0, 1, 4])
+
     guess = "gsuse"
     answer = "ansse"
-    assert position_check(guess, answer) == ([3, 4], [1])
+    assert position_check(guess, answer) == ("gsuse", [3, 4], [1])
+
     guess = "answe"
     answer = "answe"
-    assert position_check(guess, answer) == ([0, 1, 2, 3, 4], [])
+    assert position_check(guess, answer) == ("answe", [0, 1, 2, 3, 4], [])
+
     guess = "gusse"
     answer = "answe"
-    assert position_check(guess, answer) == (
-        [2, 4],
-        [],
-    )  # Omit the second 's' and do not report any wrong positions
+    # Omit the second 's' and do not report any wrong positions
+    assert position_check(guess, answer) == ("gusse", [2, 4], [])
+
     guess = "gsuse"
     answer = "answe"
-    assert position_check(guess, answer) == (
-        [4],
-        [1],
-    )  # Only report one wrong-position 's'
+    # Only report one wrong-position 's'
+    assert position_check(guess, answer) == ("gsuse", [4], [1])
+
     guess = "guess"
     answer = "answe"
-    assert position_check(guess, answer) == (
-        [],
-        [2, 3],
-    )  # Only report first wrong-position 's'
+    # Only report first wrong-position 's'
+    assert position_check(guess, answer) == ("guess", [], [2, 3])
 
 
 def test_eliminated_letters():
@@ -99,4 +105,4 @@ def test_remaining():
         "nsawe",
     ]
     orig_rigwron = position_check(guess, wordlist[4])
-    assert orig_rigwron == ([], [2, 3])
+    assert orig_rigwron == ("guess", [], [2, 3])
