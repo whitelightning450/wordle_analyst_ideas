@@ -1,3 +1,8 @@
+# vim swap files
+*~
+*.swp
+*.swo  # more deeply incremented swap files show trigger warning
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
