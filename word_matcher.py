@@ -31,6 +31,22 @@ def wrongpos_check(guess, answer, rightpos=None):
     return sorted(list(set(chain(*wrongpos))))
 
 
+def new_double_letter_check(guess, rightpos, wrongpos):
+    allrightpos = set(chain(wrongpos, rightpos))
+    rightletters = list([guess[i] for i in allrightpos])
+    max_repeat_letters = {}
+    for _i, _l in enumerate(rightletters):
+        _c = guess.count(_l)
+        _c2 = rightletters.count(_l)
+        if _c > _c2:
+            max_repeat_letters[_l] = _c2
+    return max_repeat_letters
+
+
+def double_letter_aggregate(new, prev={}):
+    return prev.update(new)
+
+
 def position_check(guess, answer):
     rightpos = rightpos_check(guess, answer)
     wrongpos = wrongpos_check(guess, answer, rightpos)
@@ -48,7 +64,25 @@ def new_eliminated_letters(guess, rightpos, wrongpos):
     return wrongletters
 
 
-def remaining(guess, wordlist, rightpos=None, wrongpos=None):
+def check_all(guess, answer):
+    rightpos, wrongpos = position_check(guess, answer)
+    double_letters = new_double_letter_check(guess, rightpos, wrongpos)
+    eliminated_letters = new_eliminated_letters(guess, rightpos, wrongpos)
+    return rightpos, wrongpos, double_letters, eliminated_letters
+
+
+def guess_game(guess, answer, double_letters=None, eliminated_letters=None):
+    if not double_letters:
+        double_letters = {}
+    if not eliminated_letters:
+        eliminated_letters = set()
+    _r, _w, _d, _e = check_all(guess, answer)
+    _d.update(double_letters)  # _d |= would be the best way
+    _e = _e | eliminated_letters  # |= would be the best way
+    return guess, answer, _r, _w, _d, _e
+
+
+def remaining(guess, wordlist, rightpos=None, wrongpos=None, x_letters=None):
     if not rightpos:
         rightpos = []
     if not wrongpos:
