@@ -64,6 +64,24 @@ def new_eliminated_letters(guess, rightpos, wrongpos):
     return wrongletters
 
 
+def check_all(guess, answer):
+    rightpos, wrongpos = position_check(guess, answer)
+    double_letters = new_double_letter_check(guess, rightpos, wrongpos)
+    eliminated_letters = new_eliminated_letters(guess, rightpos, wrongpos)
+    return rightpos, wrongpos, double_letters, eliminated_letters
+
+
+def guess_game(guess, answer, double_letters=None, eliminated_letters=None):
+    if not double_letters:
+        double_letters = {}
+    if not eliminated_letters:
+        eliminated_letters = set()
+    _r, _w, _d, _e = check_all(guess, answer)
+    _d.update(double_letters)  # _d |= would be the best way
+    _e = _e | eliminated_letters  # |= would be the best way
+    return guess, answer, _r, _w, _d, _e
+
+
 def remaining(guess, wordlist, rightpos=None, wrongpos=None, x_letters=None):
     if not rightpos:
         rightpos = []
