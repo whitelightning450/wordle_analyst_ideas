@@ -65,7 +65,7 @@ def new_eliminated_letters(guess, rightpos, wrongpos):
 
 
 def check_all(guess, answer):
-    rightpos, wrongpos = position_check(guess, answer)
+    _, rightpos, wrongpos = position_check(guess, answer)
     double_letters = new_double_letter_check(guess, rightpos, wrongpos)
     eliminated_letters = new_eliminated_letters(guess, rightpos, wrongpos)
     return rightpos, wrongpos, double_letters, eliminated_letters
