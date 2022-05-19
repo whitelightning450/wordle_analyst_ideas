@@ -135,6 +135,7 @@ def remaining(guess, wordlist, rightpos=None, wrongpos=None, x_letters=None):
 
 
 def possible_matches(guess, wordlist):
+    """returns the set of all words sharing at least one letter with the guessed word"""
     s_g = set(guess)
     r = []
     for w in wordlist:
