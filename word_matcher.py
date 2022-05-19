@@ -82,6 +82,44 @@ def guess_game(guess, answer, double_letters=None, eliminated_letters=None):
     return guess, answer, _r, _w, _d, _e
 
 
+def remaining_eliminated(wordlist, x_letters=None):
+    if x_letters:
+        return [w for w in wordlist if (set() == (set(w) & set(x_letters)))]
+    else:
+        return wordlist
+
+
+def remaining_repeated(wordlist, repeated_letters=None):
+    if repeated_letters:
+        d = {}
+        for l in repeated_letters:
+            d[l] = {w for w in wordlist if (letter_count(w, l) <= repeated_letters[l])}
+        # TODO -- this has to be super inefficient to loop through the iterators twice
+        # TODO -- not only that, but we'll do this calculation lots of extra times across
+        # the game.
+        # Start somewhere
+        r = d[l]
+        for l in repeated_letters:
+            r = r.intersection(d[l])
+        return r
+    else:
+        return wordlist
+
+
+def letter_count(word=None, letter=None):
+    """Return the number of times a particular letter shows up in a string.
+    Found this on https://www.geeksforgeeks.org/python-count-occurrences-of-a-character-in-string/
+    """
+    # TODO: This count could be a property of the wordlist -- each word could have an associated
+    # count dictionary that would very quickly be compared to the repeated letter filter.
+    if word and letter:
+        # using lambda + sum() + map() to get count
+        # counting e
+        return sum(map(lambda x: 1 if letter.lower() in x else 0, word.lower()))
+    else:
+        return 0
+
+
 def remaining(guess, wordlist, rightpos=None, wrongpos=None, x_letters=None):
     if not rightpos:
         rightpos = []
