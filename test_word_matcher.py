@@ -2,6 +2,8 @@ import pytest
 from word_matcher import (
     list_maker,
     remaining,
+    remaining_eliminated,
+    remaining_repeated,
     new_eliminated_letters,
     new_double_letter_check,
     eliminated_letters,
@@ -114,3 +116,65 @@ def test_remaining():
     ]
     orig_rigwron = position_check(guess, wordlist[4])
     assert orig_rigwron == ("guess", [], [2, 3])
+
+
+def test_remaining_eliminated():
+    eliminated_letters = {"s"}
+    wordlist = [
+        "sword",
+        "snort",
+        "sport",
+        "snoop",
+        "folly",
+        "throw",
+        "holly",
+        "moldy",
+        "dolly",
+    ]
+    assert isinstance(remaining_eliminated(wordlist, eliminated_letters), list)
+    wl_answer = [
+        "folly",
+        "throw",
+        "holly",
+        "moldy",
+        "dolly",
+    ]
+    assert wl_answer == remaining_eliminated(wordlist, eliminated_letters)
+
+
+def test_remaining_repeated():
+    repeated_letters = {"t": 1, "o": 3}
+    wl = [
+        "sword",
+        "snort",
+        "snoort",
+        "snooort",
+        "snoooort",
+        "green",
+        "trove",
+        "sport",
+        "snoop",
+        "ebony",
+        "other",
+        "throw",
+        "otter",
+        "stone",
+        "phone",
+    ]
+    assert isinstance(remaining_repeated(wl, repeated_letters), set)
+    wl_answer = {
+        "ebony",
+        "green",
+        "other",
+        "phone",
+        "snooort",
+        "snoop",
+        "snoort",
+        "snort",
+        "sport",
+        "stone",
+        "sword",
+        "throw",
+        "trove",
+    }
+    assert wl_answer == remaining_repeated(wl, repeated_letters)
