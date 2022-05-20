@@ -50,7 +50,7 @@ def test_position_check():
 def test_new_double_letter_check():
     guess = "gusse"
     answer = "answe"
-    (rightpos, wrongpos) = position_check(guess, answer)
+    (_,rightpos, wrongpos) = position_check(guess, answer)
     assert new_double_letter_check(guess, rightpos, wrongpos) == {"s": 1}
 
 
