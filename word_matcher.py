@@ -77,7 +77,9 @@ def guess_game(new_guess, results=None):
         results = {}
     answer = results.get("answer")
     if not answer:
-        pass
+        raise Exception(
+            "No answer in results dictionary. The guessing game must know the answer!"
+        )
         # TODO: STOP!!!!!!
     double_letters = results.get("double_letters")
     eliminated_letters = results.get("eliminated_letters")
@@ -130,6 +132,7 @@ def letter_count(word=None, letter=None):
     """
     # TODO: This count could be a property of the wordlist -- each word could have an associated
     # count dictionary that would very quickly be compared to the repeated letter filter.
+    # TODO: Add flag to permit case-sensitivity
     if word and letter:
         # using lambda + sum() + map() to get count
         # counting e

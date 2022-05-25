@@ -9,6 +9,9 @@ from word_matcher import (
     eliminated_letters,
     position_check,
     possible_matches,
+    letter_count,
+    check_all,
+    guess_game,
 )
 
 
@@ -178,3 +181,39 @@ def test_remaining_repeated():
         "trove",
     }
     assert wl_answer == remaining_repeated(wl, repeated_letters)
+
+
+def test_letter_count():
+    assert 4 == letter_count("GUESSguess", "s")
+
+
+def test_check_all():
+    guess = "gusse"
+    answer = "ansew"
+    a0 = check_all(guess, answer)
+    assert a0 == ([2], [4], {"s": 1}, {"g", "u"})
+
+
+def test_guess_game_broken():
+    ## Test the Exception for empty results
+    guess = "gusse"
+    with pytest.raises(Exception):
+        guess_game(
+            guess,
+        )
+    results = {}
+    results["answer"] = "ansew"
+    a1 = {
+        "guesses": {"gusse": ([2], [4])},
+        "eliminated_letters": {"g", "u"},
+        "double_letters": {"s": 1},
+        "answer": "ansew",
+    }
+    assert a1 == guess_game(guess, results)
+    a2 = {
+        "eliminated_letters": {"g", "l", "u"},
+        "double_letters": {"s": 1},
+        "guesses": {"gusse": ([2], [4]), "glass": ([], [2, 3])},
+        "answer": "ansew",
+    }
+    assert a2 == guess_game("glass", a1)
