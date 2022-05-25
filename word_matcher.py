@@ -71,15 +71,35 @@ def check_all(guess, answer):
     return rightpos, wrongpos, double_letters, eliminated_letters
 
 
-def guess_game(guess, answer, double_letters=None, eliminated_letters=None):
+def guess_game(new_guess, results=None):
+    new_results = {}
+    if not results:
+        results = {}
+    answer = results.get("answer")
+    if not answer:
+        raise Exception(
+            "No answer in results dictionary. The guessing game must know the answer!"
+        )
+        # TODO: STOP!!!!!!
+    double_letters = results.get("double_letters")
+    eliminated_letters = results.get("eliminated_letters")
+    guesses = results.get("guesses")
     if not double_letters:
         double_letters = {}
     if not eliminated_letters:
         eliminated_letters = set()
-    _r, _w, _d, _e = check_all(guess, answer)
+    if not guesses:
+        guesses = {}
+        new_results["guesses"] = {}
+    _r, _w, _d, _e = check_all(new_guess, answer)
     _d.update(double_letters)  # _d |= would be the best way
-    _e = _e | eliminated_letters  # |= would be the best way
-    return guess, answer, _r, _w, _d, _e
+    _e = _e | eliminated_letters  # _e |= would be the best way
+    new_results["eliminated_letters"] = _e
+    new_results["double_letters"] = _d
+    new_results["guesses"] = guesses
+    new_results["guesses"][new_guess] = (_r, _w)
+    new_results["answer"] = answer
+    return new_results
 
 
 def remaining_eliminated(wordlist, x_letters=None):
@@ -112,6 +132,7 @@ def letter_count(word=None, letter=None):
     """
     # TODO: This count could be a property of the wordlist -- each word could have an associated
     # count dictionary that would very quickly be compared to the repeated letter filter.
+    # TODO: Add flag to permit case-sensitivity
     if word and letter:
         # using lambda + sum() + map() to get count
         # counting e
