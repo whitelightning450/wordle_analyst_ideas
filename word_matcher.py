@@ -126,6 +126,48 @@ def remaining_repeated(wordlist, repeated_letters=None):
         return wordlist
 
 
+def remaining_wrongpos_dict(wordlist, guess=None, wrongpos=None, strict=False):
+    # TODO: This needs to wrap a pair of functions that do the filtering for just one letter
+    # TODO: Convert this to use yield or some form of map and lambda
+    remaining_words = {}
+    for pos in wrongpos:
+        wrongletter = guess[pos]
+        key = ("wrongpos", wrongletter, pos)
+        remaining_words[key] = {
+            w for w in wordlist if wrongletter in w[:pos] + w[pos + 1 :]
+        }
+        if strict:
+            remaining_words[key] = {
+                w for w in remaining_words[key] if w[pos : pos + 1] == wrongletter
+            } ^ remaining_words[key]
+
+    return remaining_words
+
+
+def remaining_wrongpos_crush(wrongpos_dict):
+    wpdl = list(wrongpos_dict.values())
+    return wpdl[0].intersection(*wpdl)
+
+
+def remaining_wrongpos(wordlist, guess=None, wrongpos=None, strict=False):
+    """
+    Return, from a starting wordlist, only words that have the letter from the guess
+    at least somewhere besides the indicated 'wrong' position.
+
+    With 'strict', a word containing the letter somewhere else AND in the wrong position
+    will be eliminated (i.e., if it has a double of the given letter and one of the
+    doubles is in the position that has been eliminated.)
+    """
+    if not guess:
+        raise Exception("Cannot determine remaining words without a guess")
+
+    if not wrongpos:
+        return wordlist
+
+    wpd = remaining_wrongpos_dict(wordlist, guess, wrongpos, strict)
+    return remaining_wrongpos_crush(wpd)
+
+
 def letter_count(word=None, letter=None):
     """Return the number of times a particular letter shows up in a string.
     Found this on https://www.geeksforgeeks.org/python-count-occurrences-of-a-character-in-string/

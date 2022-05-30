@@ -4,6 +4,9 @@ from word_matcher import (
     remaining,
     remaining_eliminated,
     remaining_repeated,
+    remaining_wrongpos,
+    remaining_wrongpos_dict,
+    remaining_wrongpos_crush,
     new_eliminated_letters,
     new_double_letter_check,
     eliminated_letters,
@@ -181,6 +184,106 @@ def test_remaining_repeated():
         "trove",
     }
     assert wl_answer == remaining_repeated(wl, repeated_letters)
+
+
+def test_remaining_wrongpos():
+    wordset = {
+        "dates",
+        "fight",
+        "grunt",
+        "light",
+        "mates",
+        "other",
+        "otter",
+        "saint",
+        "snort",
+        "sport",
+        "stays",
+        "stone",
+        "table",
+        "their",
+        "throw",
+        "trove",
+        "truck",
+        "water",
+    }
+    answer = {"dates", "mates", "saint", "table", "water"}
+    assert answer == remaining_wrongpos(wordset, "grate", [2, 3], True)
+
+
+def test_remaining_wrongpos_dict():
+    wordset = {
+        "dates",
+        "fight",
+        "grunt",
+        "light",
+        "mates",
+        "other",
+        "otter",
+        "saint",
+        "snort",
+        "sport",
+        "stays",
+        "stone",
+        "table",
+        "their",
+        "throw",
+        "trove",
+        "truck",
+        "water",
+    }
+    answer = {
+        ("wrongpos", "a", 2): {"dates", "mates", "saint", "table", "water"},
+        ("wrongpos", "t", 3): {
+            "dates",
+            "fight",
+            "grunt",
+            "light",
+            "mates",
+            "other",
+            "otter",
+            "saint",
+            "snort",
+            "sport",
+            "stays",
+            "stone",
+            "table",
+            "their",
+            "throw",
+            "trove",
+            "truck",
+            "water",
+        },
+    }
+    assert answer == remaining_wrongpos_dict(wordset, "grate", [2, 3], True)
+
+
+def test_remaining_wrongpos_crush():
+    wpdl = {
+        ("wrongpos", "g", 0): {"bangs", "fight", "light", "singe", "sings"},
+        ("wrongpos", "t", 3): {
+            "dates",
+            "fight",
+            "grunt",
+            "light",
+            "mates",
+            "other",
+            "otter",
+            "saint",
+            "snort",
+            "sport",
+            "stays",
+            "stone",
+            "table",
+            "their",
+            "throw",
+            "trove",
+            "truck",
+            "water",
+        },
+    }
+    answer = {"fight", "light"}
+    assert answer == remaining_wrongpos_crush(wpdl)
 
 
 def test_letter_count():
