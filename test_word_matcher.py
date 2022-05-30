@@ -6,7 +6,9 @@ from word_matcher import (
     remaining_repeated,
     remaining_wrongpos,
     remaining_wrongpos_dict,
-    remaining_wrongpos_crush,
+    remaining_dict_crush,
+    remaining_rightpos,
+    remaining_rightpos_dict,
     new_eliminated_letters,
     new_double_letter_check,
     eliminated_letters,
@@ -16,6 +18,7 @@ from word_matcher import (
     check_all,
     guess_game,
 )
+from wordlist import wordlist
 
 
 def test_list_maker():
@@ -258,7 +261,7 @@ def test_remaining_wrongpos_dict():
     assert answer == remaining_wrongpos_dict(wordset, "grate", [2, 3], True)
 
 
-def test_remaining_wrongpos_crush():
+def test_remaining_dict_crush():
     wpdl = {
         ("wrongpos", "g", 0): {"bangs", "fight", "light", "singe", "sings"},
         ("wrongpos", "t", 3): {
@@ -283,7 +286,44 @@ def test_remaining_wrongpos_crush():
         },
     }
     answer = {"fight", "light"}
-    assert answer == remaining_wrongpos_crush(wpdl)
+    assert answer == remaining_dict_crush(wpdl)
+
+
+def test_remaining_rightpos_dict():
+    wl = wordlist
+    answer = {
+        ("rightpos", "t", 0): {
+            "table",
+            "their",
+            "throw",
+            "train",
+            "trick",
+            "trope",
+            "trove",
+            "truck",
+        },
+        ("rightpos", "r", 1): {
+            "bread",
+            "drive",
+            "green",
+            "grime",
+            "grunt",
+            "train",
+            "trick",
+            "trope",
+            "trove",
+            "truck",
+            "write",
+            "wrong",
+        },
+    }
+    assert answer == remaining_rightpos_dict(wl, "truck", [0, 1])
+
+
+def test_remaining_rightpos():
+    wl = wordlist
+    answer = {"train", "trick", "truck", "trope", "trove"}
+    assert answer == remaining_rightpos(wl, "truck", [0, 1])
 
 
 def test_letter_count():

@@ -144,8 +144,8 @@ def remaining_wrongpos_dict(wordlist, guess=None, wrongpos=None, strict=False):
     return remaining_words
 
 
-def remaining_wrongpos_crush(wrongpos_dict):
-    wpdl = list(wrongpos_dict.values())
+def remaining_dict_crush(word_dict):
+    wpdl = list(word_dict.values())
     return wpdl[0].intersection(*wpdl)
 
 
@@ -165,7 +165,34 @@ def remaining_wrongpos(wordlist, guess=None, wrongpos=None, strict=False):
         return wordlist
 
     wpd = remaining_wrongpos_dict(wordlist, guess, wrongpos, strict)
-    return remaining_wrongpos_crush(wpd)
+    return remaining_dict_crush(wpd)
+
+
+def remaining_rightpos_dict(wordlist, guess=None, rightpos=None):
+    # TODO: This needs to wrap a pair of functions that do the filtering for just one letter
+    # TODO: Convert this to use yield or some form of map and lambda
+    remaining_words = {}
+    for pos in rightpos:
+        rightletter = guess[pos]
+        key = ("rightpos", rightletter, pos)
+        remaining_words[key] = {w for w in wordlist if w[pos : pos + 1] == rightletter}
+
+    return remaining_words
+
+
+def remaining_rightpos(wordlist, guess=None, rightpos=None):
+    """
+    Return, from a starting wordlist, only words that have the letter from the guess
+    exactly in the 'right' position.
+    """
+    if not guess:
+        raise Exception("Cannot determine remaining words without a guess")
+
+    if not rightpos:
+        return wordlist
+
+    wpd = remaining_rightpos_dict(wordlist, guess, rightpos)
+    return remaining_dict_crush(wpd)
 
 
 def letter_count(word=None, letter=None):
