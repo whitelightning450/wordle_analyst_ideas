@@ -29,3 +29,6 @@ If it is true that dividing the search space in half is the best approach (I don
 For the moment, it appears that the wordlist is being used without any randomization - search for today's word here and look at the previous couple of list entries, for instance. https://www.nytimes.com/games/wordle/main.4d41d2be.js
 
 That's not a particularly noble approach, but it seems like you could get perfect scores.
+
+### Update:
+Sometime in May they started to scramble the word order.
